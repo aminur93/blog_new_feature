@@ -11,6 +11,14 @@ use DB;
 
 class CategoryController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:category-list|category-create|category-edit|category-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:category-create', ['only' => ['create','store']]);
+        $this->middleware('permission:category-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:category-delete', ['only' => ['destroy']]);
+    }
+    
     public function index()
     {
         return view('admin.category.index');
@@ -125,7 +133,7 @@ class CategoryController extends Controller
         $vategory = Category::findOrFail($id);
         $vategory->delete();
     
-        return redirect()->back()->with('flash_message_success','Blood Delete Successfully');
+        return redirect()->back()->with('flash_message_success','Category Delete Successfully');
     }
     
     public function importData(Request $request)

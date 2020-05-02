@@ -185,11 +185,11 @@ class PostController extends Controller
                 if($image_tmp->isValid()){
                     $extenson = $image_tmp->getClientOriginalExtension();
                     $filename = rand(111,99999).'.'.$extenson;
-                    $large_image_path = '/assets/uploads/original_image/'.$filename;
-                    $medium_image_path = '/assets/uploads/thumbnail/'.$filename;
+                    $large_image_path = public_path().'/assets/uploads/original_image/'.$filename;
+                    $medium_image_path = public_path().'/assets/uploads/thumbnail/'.$filename;
             
                     //Resize Image
-                    Image::make($image_tmp)->resize(1200,1200)->save($large_image_path);
+                    Image::make($image_tmp)->save($large_image_path);
                     Image::make($image_tmp)->resize(150,150)->save($medium_image_path);
             
                 }

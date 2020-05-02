@@ -1,28 +1,34 @@
-<div class="header">
-    <div class="container">
-        <div class="header-info">
-            <div class="logo">
-                <a href="index.html"><img src="/frontend/images/logo.png" alt=" " /></a>
+<header>
+    <!-- Navbar
+  ================================================== -->
+    <div class="navbar navbar-static-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <!-- logo -->
+                <div class="logo">
+                    <a href="{{ url('/') }}">
+                        <img src="{{ asset('frontend/assets/img/logo.png') }}" alt="" />
+                    </a>
+                </div>
+                <!-- end logo -->
+                <!-- top menu -->
+                <div class="navigation">
+                    <nav>
+                        <ul class="nav topnav">
+                            <li>
+                                <a href="{{ url('/') }}"><i class="icon-home"></i> Home </a>
+                            </li>
+                            <li>
+                                <a href="{{ url('/') }}"><i class=" icon-folder-open-alt"></i> All Post </a>
+                            </li>
+                            <li>
+                                <a href="contact.html"><i class="icon-envelope-alt"></i> Contact </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <!-- end menu -->
             </div>
-            <div class="logo-right">
-                <span class="menu"><img src="/frontend/images/menu.png" alt=" "/></span>
-                <ul class="nav1">
-                    <li class="cap"><a href="{{ url('/') }}">Home</a></li>
-                    <li><a href="">All Articles</a></li>
-                    <li><a href="">Tutorials</a></li>
-                    <li><a href="">Contact</a></li>
-                </ul>
-            </div>
-            <div class="clearfix"> </div>
-            <!-- script for menu -->
-            <script>
-                $( "span.menu" ).click(function() {
-                    $( "ul.nav1" ).slideToggle( 300, function() {
-                        // Animation complete.
-                    });
-                });
-            </script>
-            <!-- //script for menu -->
         </div>
     </div>
-</div>
+</header>

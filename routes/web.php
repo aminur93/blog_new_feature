@@ -11,9 +11,10 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'FrontController@index');
+Route::get('/post/single/{slug}', 'FrontController@singlePost')->name('single.post');
+Route::get('/post/category_post/{id}', 'FrontController@categoryPost')->name('post.category_post');
+Route::get('/post/tag_post/{id}', 'FrontController@tagPost')->name('post.tag_post');
 
 Auth::routes();
 

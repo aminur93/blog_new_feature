@@ -350,4 +350,37 @@ class PostController extends Controller
         
         return redirect()->back()->with('flash_message_success','Post Image Deleted Successfully');
     }
+    
+    public function userIndex()
+    {
+        return view('admin.user_message.index');
+    }
+    
+    public function messageData()
+    {
+        $message = DB::table('contacts')->get();
+    
+        return DataTables::of($message)
+            ->addIndexColumn()
+            ->editColumn('action', function ($message){
+            
+                $return = "<div class='btn-group'>";
+                if(!empty($message->name))
+                {
+                    $return .= "
+                            <a href=\"/message/view/$message->id\" style='margin-right: 5px' class=\"btn btn-sm btn-warning\"><i class='fa fa-eye'></i></a>
+                            ||
+                            <a  href=\"/message/reply/$message->id\" style='margin-right: 5px' class=\"btn btn-sm btn-danger deleteRecord \"><i class='fa fa-reply'></i></a>
+                                  ";
+                }
+                $return .= "</div>";
+            
+                return $return;
+            })
+        
+            ->rawColumns([
+                'action'
+            ])
+            ->make(true);
+    }
 }

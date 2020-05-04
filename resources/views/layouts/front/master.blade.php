@@ -47,8 +47,8 @@
                 <div class="span8">
                     <ul class="breadcrumb">
                         <li><a href="#"><i class="icon-home"></i></a><i class="icon-angle-right"></i></li>
-                        <li><a href="#">Blog</a><i class="icon-angle-right"></i></li>
-                        <li class="active">Programming News Blog</li>
+                        <li><a href="{{ url('/') }}">Blog</a><i class="icon-angle-right"></i></li>
+                        <li class="active">@yield('page')</li>
                     </ul>
                 </div>
                 <div class="span4">

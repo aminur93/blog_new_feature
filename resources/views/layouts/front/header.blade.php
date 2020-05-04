@@ -19,10 +19,10 @@
                                 <a href="{{ url('/') }}"><i class="icon-home"></i> Home </a>
                             </li>
                             <li>
-                                <a href="{{ url('/') }}"><i class=" icon-folder-open-alt"></i> All Post </a>
+                                <a href="{{ route('post.allPost') }}"><i class=" icon-folder-open-alt"></i> All Post </a>
                             </li>
                             <li>
-                                <a href="contact.html"><i class="icon-envelope-alt"></i> Contact </a>
+                                <a href="{{ route('post.contact') }}"><i class="icon-envelope-alt"></i> Contact </a>
                             </li>
                         </ul>
                     </nav>

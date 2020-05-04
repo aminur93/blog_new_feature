@@ -17,6 +17,9 @@ Route::get('/post/category_post/{id}', 'FrontController@categoryPost')->name('po
 Route::get('/post/tag_post/{id}', 'FrontController@tagPost')->name('post.tag_post');
 Route::get('/post/autocomplete/fetch', 'FrontController@fetch')->name('post.fetch');
 Route::post('/post/search', 'FrontController@search')->name('post.search');
+Route::get('/post/all_post', 'FrontController@allPost')->name('post.allPost');
+Route::get('/post/contact', 'FrontController@contact')->name('post.contact');
+Route::post('/contact_store', 'FrontController@store')->name('contact.store');
 
 Auth::routes();
 
@@ -24,6 +27,10 @@ Auth::routes();
 Route::group(['middleware' => ['auth','admin']], function () {
     
     Route::get('/dashboard', 'DashboardController@index')->name('admin.dashboard');
+    
+    //Contact Message Routes
+    Route::get('/message','PostController@userIndex')->name('message');
+    Route::get('/message/messageData','PostController@messageData')->name('messageData');
     
     //Category Route
     Route::get('/category', 'CategoryController@index')->name('category');

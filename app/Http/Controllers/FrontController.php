@@ -149,4 +149,48 @@ class FrontController extends Controller
             echo $output;
         }
     }
+    
+    public function allPost()
+    {
+        $posts = Post::latest()->paginate(12);
+        return view('front.all_post',compact('posts'));
+    }
+    
+    public function contact()
+    {
+        return view('front.contact');
+    }
+    
+    public function store(Request $request)
+    {
+        if ($request->isMethod('post'))
+        {
+            DB::beginTransaction();
+    
+            try{
+                // Step 1 : Create Contact
+                $name = $request->name;
+                $email = $request->email;
+                $subject = $request->subject;
+                $message = $request->message;
+                
+                DB::table('contacts')->insert(['name'=>$name,'email'=>$email,'subject'=>$subject,'message'=>$message]);
+        
+                DB::commit();
+        
+                return response()->json([
+                    'flash_message_success' => 'Message Send Successfully'
+                ],200);
+        
+            }catch(\Illuminate\Database\QueryException $e){
+                DB::rollback();
+        
+                $error = $e->getMessage();
+        
+                return response()->json([
+                    'error' => $error
+                ],200);
+            }
+        }
+    }
 }

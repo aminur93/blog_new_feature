@@ -32,6 +32,13 @@
             </ul>
         </li>
 
+        <li class="dropdown">
+            <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-envelope-open"></i> <span>Message</span></a>
+            <ul class="dropdown-menu">
+                <li><a class="nav-link" href="{{ route('message') }}">View User Message</a></li>
+            </ul>
+        </li>
+
         <hr style="width: 225px;">
 
         {{--@hasrole('Admin|Sub-Admin')--}}

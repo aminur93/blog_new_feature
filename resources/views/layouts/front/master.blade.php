@@ -48,15 +48,18 @@
                     <ul class="breadcrumb">
                         <li><a href="#"><i class="icon-home"></i></a><i class="icon-angle-right"></i></li>
                         <li><a href="#">Blog</a><i class="icon-angle-right"></i></li>
-                        <li class="active">Football News Blog</li>
+                        <li class="active">Programming News Blog</li>
                     </ul>
                 </div>
                 <div class="span4">
                     <div class="search">
-                        <form class="input-append">
-                            <input class="search-form" id="appendedPrependedInput" type="text" placeholder="Search here.." />
+                        <form method="post" id="search_post" class="input-append">
+                            @csrf
+                            <input style="width: 300px;" class="form-control search-form" id="title" name="title" type="text" autocomplete="off" placeholder="Search here.." />
                             <button class="btn btn-dark" type="submit">Search</button>
+                            <div id="postTitle"></div>
                         </form>
+
                     </div>
                 </div>
             </div>
@@ -90,6 +93,50 @@
 
 <!-- Template Custom JavaScript File -->
 <script src="{{ asset('frontend/assets/js/custom.js') }}"></script>
+
+<script>
+    $(document).ready(function () {
+       $("#title").keyup(function () {
+           var query = $(this).val();
+            if(query != '') {
+                var _token = $('input[name="_token"]').val();
+
+                $.ajax({
+                    url: "{{ route('post.fetch') }}",
+                    method: "POST",
+                    data: {query: query, _token: _token},
+                    success: function (data) {
+                        $("#postTitle").fadeIn();
+                        $("#postTitle").html(data);
+                    }
+                });
+            }
+       });
+
+        $("#search_post").on("submit",function (e) {
+            e.preventDefault();
+
+            var title = $("#title").val();
+            var _token = $('input[name="_token"]').val();
+
+            $.ajax({
+                url: "{{ route('post.search') }}",
+                type: "post",
+                data: {title:title,_token:_token},
+                success: function (data) {
+                    $("#seach4").html(" ");
+                    $("#seach4").html(data);
+                }
+            });
+        });
+
+        $(document).on('click', 'li', function(){
+            $('#title').val($(this).text());
+            $('#postTitle').fadeOut();
+        });
+
+    });
+</script>
 
 @stack('js')
 

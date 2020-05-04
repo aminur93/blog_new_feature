@@ -81,4 +81,72 @@ class FrontController extends Controller
         $category = Category::latest()->get();
         return view('front.tag_post',compact('tag','latest_post','tags','category'));
     }
+    
+    public function fetch(Request $request)
+    {
+        if ($request->get('query'))
+        {
+            $query = $request->get('query');
+            
+            $data = Post::where('title','LIKE',"%{$query}%")->get();
+    
+            $output = '<ul class="dropdown-menu" style="display:inline-block; position:relative;">';
+            foreach($data as $row)
+            {
+                $output .= '
+                           <li><a href="#">'.$row->title.'</a></li>
+                           ';
+            }
+            $output .= '</ul>';
+            echo $output;
+        }
+    }
+    
+    public function search(Request $request)
+    {
+        if ($request->isMethod('post'))
+        {
+            $title = $request->get('title');
+            
+            $data = Post::with('category','tag')->where('title','LIKE',"%{$title}%")->get();
+            
+           
+            $output = '';
+            foreach ($data as $row)
+            {
+                $output .= '
+                            <article class="blog-post">
+                                <div class="post-heading">
+                                    <h3><a href="/post/single/'.$row->slug.'"> '.$row->title.' </a></h3>
+                                </div>
+                                <div class="row">
+                                    <div class="span8">
+                                        <div class="post-image">
+                                            <a href="#"><img src="/assets/uploads/original_image/'. $row->image.'" alt="" /></a>
+                                        </div>
+                                        <ul class="post-meta">
+                                            <li class="first"><i class="icon-calendar"></i><span></span></li>
+                                            <li><i class="icon-comments"></i><span><a href="#">4 comments</a></span></li>
+                                            <li class="last"><i class="icon-tags"></i><span><a href="#">'.$row->tag->name.'</a></span></li>
+                                            <li class="last"><i class="icon-reorder"></i><span><a href="/post/category_post/'.$row->category->id.'">'.$row->category->name.'</a></span></li>
+                                        </ul>
+                                        <div class="clearfix">
+                                        </div>
+                                        <p>
+                                            '.substr(strip_tags($row->body),0,200).'
+                                            
+                                        </p>
+                                        <a href="/post/single/'.$row->slug.'" class="btn btn-small btn-theme">Read more</a>
+                                    </div>
+                                </div>
+                            </article>
+                          
+                            <div class="pagination text-center">
+                            
+                            </div>';
+            }
+            
+            echo $output;
+        }
+    }
 }

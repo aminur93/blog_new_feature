@@ -15,12 +15,15 @@ Route::get('/', 'FrontController@index');
 Route::get('/post/single/{slug}', 'FrontController@singlePost')->name('single.post');
 Route::get('/post/category_post/{id}', 'FrontController@categoryPost')->name('post.category_post');
 Route::get('/post/tag_post/{id}', 'FrontController@tagPost')->name('post.tag_post');
+Route::get('/post/autocomplete/fetch', 'FrontController@fetch')->name('post.fetch');
+Route::post('/post/search', 'FrontController@search')->name('post.search');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
 
-Route::group(['middleware' => ['auth','role:Admin|Sub-Admin']], function () {
+Route::group(['middleware' => ['auth','admin']], function () {
+    
+    Route::get('/dashboard', 'DashboardController@index')->name('admin.dashboard');
     
     //Category Route
     Route::get('/category', 'CategoryController@index')->name('category');
@@ -88,4 +91,11 @@ Route::group(['middleware' => ['auth','role:Admin|Sub-Admin']], function () {
     Route::post('/permission/update/{id}',['as'=>'permission.update','uses'=>'PermissionController@update']);
     Route::get('/permission/delete-permission/{id}',['as'=>'permission.delete','uses'=>'PermissionController@destroy']);
 });
+
+Route::group(['middleware' => ['auth','author']], function () {
+    
+    Route::get('/authordashboard', 'AuthorController@index')->name('author.dashboard');
+    
+});
+
 

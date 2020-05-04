@@ -8,12 +8,12 @@
     @endpush
 
 @section('content')
-    <div class="span8">
+    <div class="span8" id="seach4">
         @foreach($posts as $post)
         <!-- start article 1 -->
         <article class="blog-post">
             <div class="post-heading">
-                <h3><a href="#">{{ $post->title }}</a></h3>
+                <h3><a href="{{ route('single.post',$post->slug) }}">{{ $post->title }}</a></h3>
             </div>
             <div class="row">
                 <div class="span8">
@@ -82,7 +82,4 @@
 @stop
 
 @push('js')
-    <script type="text/javascript">
-
-    </script>
     @endpush

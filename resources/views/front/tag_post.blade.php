@@ -13,7 +13,7 @@ Tag Post
         <!-- start article 1 -->
             <article class="blog-post">
                 <div class="post-heading">
-                    <h3><a href="#">{{ $tag_post->title }}</a></h3>
+                    <h3><a href="{{ route('single.post',$tag_post->slug) }}">{{ $tag_post->title }}</a></h3>
                 </div>
                 <div class="row">
                     <div class="span8">

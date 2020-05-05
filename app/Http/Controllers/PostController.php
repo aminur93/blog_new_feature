@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\Mail\SendMail;
 use App\Post;
 use App\Tag;
 use Illuminate\Http\Request;
 use DB;
 use Auth;
+use Illuminate\Support\Facades\Mail;
 use Image;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -382,5 +384,33 @@ class PostController extends Controller
                 'action'
             ])
             ->make(true);
+    }
+    
+    public function view($id)
+    {
+        $message = DB::table('contacts')->where('id',$id)->first();
+        return view('admin.user_message.view_message',compact('message'));
+    }
+    
+    public function reply($id)
+    {
+        $message = DB::table('contacts')->where('id',$id)->first();
+        return view('admin.user_message.reply_message',compact('message'));
+    }
+    
+    public function send(Request $request)
+    {
+        $data = array(
+            'name' => $request->name,
+            'from_email' => $request->from_email,
+            'subject' => $request->subject,
+            'message' => $request->message
+        );
+        
+        
+        Mail::to($request->to_email)->send( new SendMail($data));
+    
+    
+        return redirect()->back()->with('flash_message_success','Email Has Been sent');
     }
 }

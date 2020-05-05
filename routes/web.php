@@ -31,6 +31,9 @@ Route::group(['middleware' => ['auth','admin']], function () {
     //Contact Message Routes
     Route::get('/message','PostController@userIndex')->name('message');
     Route::get('/message/messageData','PostController@messageData')->name('messageData');
+    Route::get('/message/view/{id}','PostController@view')->name('view');
+    Route::get('/message/reply/{id}','PostController@reply')->name('reply');
+    Route::post('/message/send','PostController@send')->name('send');
     
     //Category Route
     Route::get('/category', 'CategoryController@index')->name('category');

@@ -21,6 +21,8 @@ class CreatePostsTable extends Migration
             $table->string('title');
             $table->string('slug');
             $table->text('body');
+            $table->string('image');
+            $table->date('post-date');
             $table->integer('view_count');
             $table->integer('status');
             $table->tinyInteger('is_approved');

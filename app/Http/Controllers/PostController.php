@@ -35,14 +35,6 @@ class PostController extends Controller
 //            DB::beginTransaction();
 //
 //            try{
-                
-                $originalImage= $request->file('image');
-                $thumbnailImage = Image::make($originalImage);
-                $thumbnailPath = public_path().'/assets/uploads/thumbnail/';
-                $originalPath = public_path().'/assets/uploads/original_image/';
-                $thumbnailImage->save($originalPath.time().$originalImage->getClientOriginalName());
-                $thumbnailImage->resize(150,150);
-                $thumbnailImage->save($thumbnailPath.time().$originalImage->getClientOriginalName());
     
                 $user_id = Auth::user()->id;
                 
@@ -54,7 +46,26 @@ class PostController extends Controller
                 $post->title = $request->title;
                 $post->slug = $request->slug;
                 $post->body = $request->body;
-                $post->image = time().$originalImage->getClientOriginalName();
+                
+                if($request->hasFile('image')){
+            
+                    $image_tmp = $request->file('image');
+                    if($image_tmp->isValid()){
+                        $extenson = $image_tmp->getClientOriginalExtension();
+                        $filename = rand(111,99999).'.'.$extenson;
+                        $large_image_path = public_path().'/assets/uploads/original_image/'.$filename;
+                        $medium_image_path = public_path().'/assets/uploads/thumbnail/'.$filename;
+                
+                        //Resize Image
+                        Image::make($image_tmp)->save($large_image_path);
+                        Image::make($image_tmp)->resize(150,150)->save($medium_image_path);
+                
+                        //store product image in data table
+    
+                        $post->image = $filename;
+                    }
+                }
+                
                 $post->post_date = $request->post_date;
                 $post->view_count = 0;
                 
@@ -233,7 +244,7 @@ class PostController extends Controller
             $post->update();
         
             return response()->json([
-                'flash_message_success' => 'Post Added Successfully'
+                'flash_message_success' => 'Post Updated Successfully'
             ],200);
         }
     }

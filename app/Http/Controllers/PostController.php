@@ -419,7 +419,7 @@ class PostController extends Controller
         );
         
         
-        Mail::to($request->to_email)->send( new SendMail($data));
+        Mail::to($request->to_email)->queue( new SendMail($data));
     
     
         return redirect()->back()->with('flash_message_success','Email Has Been sent');

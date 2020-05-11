@@ -10,13 +10,16 @@
 - create pdf and csv download option
 - image can resize 
 - dropzone
-- multi authencatiation
+- multiple authentication
 - custom middleware
-- email sender
+- email sender with queue
 - yajra datatable
-- custom helper
-- mutiple file upload
+- custom helpers
+- multiple file upload
 - date format
+- comment system
+- task scheduling
+- cron jobs
 
 <p>Hope this project will be help for another</p> 
 

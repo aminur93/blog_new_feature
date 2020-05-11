@@ -12,7 +12,7 @@
 */
 
 Route::get('/', 'FrontController@index');
-Route::get('/post/single/{slug}', 'FrontController@singlePost')->name('single.post');
+Route::get('/post/single/{id}', 'FrontController@singlePost')->name('single.post');
 Route::get('/post/category_post/{id}', 'FrontController@categoryPost')->name('post.category_post');
 Route::get('/post/tag_post/{id}', 'FrontController@tagPost')->name('post.tag_post');
 Route::get('/post/autocomplete/fetch', 'FrontController@fetch')->name('post.fetch');
@@ -20,6 +20,16 @@ Route::post('/post/search', 'FrontController@search')->name('post.search');
 Route::get('/post/all_post', 'FrontController@allPost')->name('post.allPost');
 Route::get('/post/contact', 'FrontController@contact')->name('post.contact');
 Route::post('/contact_store', 'FrontController@store')->name('contact.store');
+
+//comments routes
+Route::post('/comments/store','CommentController@store')->name('comments.store');
+
+//reply comments routes
+Route::post('/comments_replyss/post-comments/{comment_id}','CommentController@Comment_replyss');
+Route::get('/replies_from/{id}','CommentController@replies_from');
+
+//subscribe
+Route::post('/subscriber_email_user','FrontController@subscriber_email')->name('subscriber.email_user');
 
 Auth::routes();
 

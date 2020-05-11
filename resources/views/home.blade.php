@@ -28,7 +28,7 @@
                         </ul>
                         <div class="clearfix">
                         </div>
-                        <p>
+                        <p class="text-justify">
                             <?= strip_tags($posts->body) ?>
                         </p>
                     </div>
@@ -37,105 +37,30 @@
             <!-- end article 1 -->
 
         <h4>Comments</h4>
-        <ul class="media-list">
-            <li class="media">
-                <a class="pull-left" href="#">
-                    <img class="media-object" src="/frontend/assets/img/small-avatar.png" alt="" />
-                </a>
-                <div class="media-body">
-                    <h5 class="media-heading"><a href="#">John doe</a></h5>
-                    <span>3 March, 2013</span>
-                    <p>
-                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.
-                    </p>
-                    <a href="#" class="reply">Reply</a>
-                    <div class="clearfix">
-                    </div>
-                    <!-- Nested media object -->
-                    <div class="media">
-                        <a class="pull-left" href="#">
-                            <img class="media-object" src="/frontend/assets/img/small-avatar.png" alt="" />
-                        </a>
-                        <div class="media-body">
-                            <h5 class="media-heading"><a href="#">Tom slayer</a></h5>
-                            <span>3 March, 2013</span>
-                            <p>
-                                Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.
-                            </p>
-                            <a href="#" class="reply">Reply</a>
-                            <div class="clearfix">
-                            </div>
-                            <!-- Nested media object -->
-                            <div class="media">
-                                <a class="pull-left" href="#">
-                                    <img class="media-object" src="/frontend/assets/img/small-avatar.png" alt="" />
-                                </a>
-                                <div class="media-body">
-                                    <h5 class="media-heading"><a href="#">Erick doe</a></h5>
-                                    <span>3 March, 2013</span>
-                                    <p>
-                                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.
-                                    </p>
-                                    <a href="#" class="reply">Reply</a>
-                                    <div class="clearfix">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Nested media object -->
-                    <div class="media">
-                        <a class="pull-left" href="#">
-                            <img class="media-object" src="/frontend/assets/img/small-avatar.png" alt="" />
-                        </a>
-                        <div class="media-body">
-                            <h5 class="media-heading"><a href="#">Jimmy doe</a></h5>
-                            <span>3 March, 2013</span>
-                            <p>
-                                Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.
-                            </p>
-                            <a href="#" class="reply">Reply</a>
-                            <div class="clearfix">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </li>
-            <li class="media">
-                <a class="pull-left" href="#">
-                    <img class="media-object" src="/frontend/assets/img/small-avatar.png" alt="" />
-                </a>
-                <div class="media-body">
-                    <h5 class="media-heading"><a href="#">Mike sullivan</a></h5>
-                    <span>3 March, 2013</span>
-                    <p>
-                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.
-                    </p>
-                    <a href="#" class="reply">Reply</a>
-                    <div class="clearfix">
-                    </div>
-                </div>
-            </li>
+        <ul class="media-list" id="comment">
+            <div id="reply_success_message"></div>
+            <div id="reply_error_message"></div>
+
+            @foreach($commentss as $comment)
+                @include('front.comment_data', ['comments' => $comment])
+            @endforeach
         </ul>
+
         <div class="comment-post">
+            <div id="success_message"></div>
+            <div id="error_message"></div>
             <h4>Leave a comment</h4>
-            <form action="" method="post" class="comment-form" name="comment-form">
+            <form method="post" id="comment_form" class="comment-form" name="comment-form">
+                @csrf
+
+                <input type="hidden" value="{{ $posts->id }}" name="post_id" id="post_id">
+
+                <input type="hidden" value="{{ $posts->slug }}" name="post_slug" id="post_slug">
+
                 <div class="row">
-                    <div class="span4">
-                        <label>Name <span>*</span></label>
-                        <input type="text" class="input-block-level" placeholder="Your name" />
-                    </div>
-                    <div class="span4">
-                        <label>Email <span>*</span></label>
-                        <input type="text" class="input-block-level" placeholder="Your email" />
-                    </div>
-                    <div class="span4">
-                        <label>URL</label>
-                        <input type="text" class="input-block-level" placeholder="Your website url" />
-                    </div>
                     <div class="span8">
                         <label>Comment <span>*</span></label>
-                        <textarea rows="9" class="input-block-level" placeholder="Your comment"></textarea>
+                        <textarea rows="9" name="description" id="description" class="input-block-level" placeholder="Your comment"></textarea>
                         <button class="btn btn-theme" type="submit">Submit comment</button>
                     </div>
                 </div>
@@ -182,4 +107,140 @@
 @endsection
 
 @push('js')
+    <script>
+        $(document).ready(function () {
+            $(document).on("click","#replies",function () {
+
+                var id = $(this).data('id');
+
+                $.ajax({
+                    url: "/replies_from/"+id,
+                    type: "get",
+                    data: {id:id},
+                    success: function (response) {
+
+                        if (response != 0) {
+                            var data = JSON.parse(response);
+                            $('#replies_from').toggle('slow');
+                            if (data.code == 1) {
+                                $('#replies_from').html(data.view);
+
+                            } else if (data.code == 500) {
+
+                            } else {
+                                alert('Something Went Horribly Wrong!!');
+                            }
+                        }
+                    }
+                });
+            })
+        })
+    </script>
+
+    <script>
+        $(document).ready(function () {
+
+            $("#comment_form").on("submit",function (e) {
+                e.preventDefault();
+
+                var myDaya = $("#comment_form").serializeArray();
+
+                $.ajax({
+                    url: "{{ route('comments.store') }}",
+                    type: "post",
+                    data: $.param(myDaya),
+                    dataType: "json",
+                    success: function (data) {
+
+                        $("#comment").append(data['comment']);
+
+                        if(data.flash_message_success) {
+                            $('#success_message').html(' <div class="alert alert-success alert-block">\n' +
+                                '                <button type="button" class="close" data-dismiss="alert">x</button>\n' +
+                                '               <strong>' + data.flash_message_success + '</strong>\n' +
+                                '            </div>');
+                        }else {
+
+                            $('#error_message').html(' <div class="alert alert-danger alert-block">\n' +
+                                '                <button type="button" class="close" data-dismiss="alert">x</button>\n' +
+                                '               <strong>' + data.error + '</strong>\n' +
+                                '            </div>');
+                        }
+
+                        $("form").trigger("reset");
+
+                        $('.form-group').find('.valids').hide();
+
+                    },
+
+                    error : function (err) {
+                        if (err.status == 422) {
+
+                            $.each(err.responseJSON.errors, function (i, error) {
+                                var el = $(document).find('[name="'+i+'"]');
+                                el.after($('<span class="valids" style="color: red;">'+error+'</span>'));
+                            });
+                        }
+                    }
+                });
+            })
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+
+            $(document).on("submit","#comment-form",function (e) {
+                e.preventDefault();
+
+                var comment_id = $("#comment_id").val();
+
+                var reply_description = $("#reply_description").val();
+
+                var _token = $('input[name="_token"]').val();
+
+
+                $.ajax({
+                    url: "/comments_replyss/post-comments/"+comment_id,
+                    type: "post",
+                    data: {comment_id:comment_id, reply_description:reply_description,_token:_token},
+                    dataType: "json",
+                    success: function (data) {
+
+                        //$("#comment").append(data['comment']);
+
+                        if(data.flash_message_success) {
+                            $('#reply_success_message').html(' <div class="alert alert-success alert-block">\n' +
+                                '                <button type="button" class="close" data-dismiss="alert">x</button>\n' +
+                                '               <strong>' + data.flash_message_success + '</strong>\n' +
+                                '            </div>');
+                        }else {
+
+                            $('#reply_error_message').html(' <div class="alert alert-danger alert-block">\n' +
+                                '                <button type="button" class="close" data-dismiss="alert">x</button>\n' +
+                                '               <strong>' + data.error + '</strong>\n' +
+                                '            </div>');
+                        }
+
+                        $("#replies_from").trigger("reset");
+
+                        $("#replies_from").hide();
+
+                        $('.form-group').find('.valids').hide();
+                    },
+
+                    error : function (err) {
+                        if (err.status == 422) {
+
+                            $.each(err.responseJSON.errors, function (i, error) {
+                                var el = $(document).find('[name="'+i+'"]');
+                                el.after($('<span class="valids" style="color: red;">'+error+'</span>'));
+                            });
+                        }
+                    }
+
+                });
+            });
+        });
+    </script>
     @endpush

@@ -18,4 +18,9 @@ class Post extends Model
     {
         return $this->belongsTo('App\Tag','tag_id','id');
     }
+    
+    public function comments()
+    {
+        return $this->hasMany('App\Comment','post_id','id');
+    }
 }

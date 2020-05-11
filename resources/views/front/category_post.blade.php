@@ -8,12 +8,13 @@ Category Post
 @endpush
 
 @section('content')
+    @if(!empty($categories['post_id']))
     <div class="span8">
-    @foreach($categories as $cat_post)
+        @foreach($categories as $cat_post)
         <!-- start article 1 -->
             <article class="blog-post">
                 <div class="post-heading">
-                    <h3><a href="{{ route('single.post',$cat_post->slug) }}">{{ $cat_post->title }}</a></h3>
+                    <h3><a href="{{ route('single.post',$cat_post->post_id) }}">{{ $cat_post->title }}</a></h3>
                 </div>
                 <div class="row">
                     <div class="span8">
@@ -31,17 +32,21 @@ Category Post
                         <p>
                             <?= substr(strip_tags($cat_post->body),0,200)?>
                         </p>
-                        <a href="{{ route('single.post',$cat_post->slug) }}" class="btn btn-small btn-theme">Read more</a>
+                        <a href="{{ route('single.post',$cat_post->post_id) }}" class="btn btn-small btn-theme">Read more</a>
                     </div>
                 </div>
             </article>
             <!-- end article 1 -->
         @endforeach
-
         <div class="pagination text-center">
-            {{--{{ $cat_post->links() }}--}}
+            {{--{{ $categories->links() }}--}}
         </div>
     </div>
+    @else
+        <div class="span8">
+            <h4>This category Do not have nay Post</h4>
+        </div>
+    @endif
 
     <div class="span4">
         <aside>
@@ -59,7 +64,7 @@ Category Post
                 <h4 class="rheading">Recent posts<span></span></h4>
                 <ul class="recent-posts">
                     @foreach($latest_post as $lp)
-                        <li><a href="{{ route('single.post',$lp->slug) }}">{{ $lp->title }}</a>
+                        <li><a href="{{ route('single.post',$lp->id) }}">{{ $lp->title }}</a>
                             <div class="clear">
                             </div>
                             <span class="date"><i class="icon-calendar"></i> <?= date('d F Y', strtotime($lp->post_date))?></span>

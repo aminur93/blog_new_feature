@@ -96,6 +96,42 @@
 
 <script>
     $(document).ready(function () {
+        $(document).on("submit","#subscribe_post",function (e) {
+            e.preventDefault();
+            var email = $("#email").val();
+            var _token = $('input[name="_token"]').val();
+
+            $.ajax({
+                url: "{{ route('subscriber.email_user') }}",
+                type: "POST",
+                data: {email:email, _token:_token},
+                dataType: "json",
+                success: function (data) {
+
+                    if(data.flash_message_success) {
+                        $('#success_message').html(' <div class="alert alert-success alert-block">\n' +
+                            '                <button type="button" class="close" data-dismiss="alert">x</button>\n' +
+                            '               <strong>' + data.flash_message_success + '</strong>\n' +
+                            '            </div>');
+                    }else {
+
+                        $('#error_message').html(' <div class="alert alert-danger alert-block">\n' +
+                            '                <button type="button" class="close" data-dismiss="alert">x</button>\n' +
+                            '               <strong>' + data.error + '</strong>\n' +
+                            '            </div>');
+                    }
+
+                    $("form").trigger("reset");
+
+                    $('.form-group').find('.valids').hide();
+                }
+            });
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
        $("#title").keyup(function () {
            var query = $(this).val();
             if(query != '') {

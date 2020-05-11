@@ -15,10 +15,20 @@
             </div>
             <div class="span4">
                 <div class="widget">
-                    <h5>Flickr photostream</h5>
+                    <h5>Subscribe Email</h5>
                     <div class="flickr-badge">
-                        <script type="text/javascript" src="http://www.flickr.com/badge_code_v2.gne?count=9&amp;display=random&amp;size=s&amp;layout=x&amp;source=user&amp;user=34178660@N03"></script>
+                        <form method="post" id="subscribe_post">
+                            @csrf
+                            <div class="input-group">
+                                <input type="email" name="email" id="email" class="form-control" placeholder="Recipient's Email">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="submit">Subscribe</button>
+                                </div>
+                            </div>
+                        </form>
 
+                        <div id="success_message"></div>
+                        <div id="error_message"></div>
                     </div>
                     <div class="clear"></div>
                 </div>

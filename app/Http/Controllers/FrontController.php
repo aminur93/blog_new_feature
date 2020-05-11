@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\Comment;
 use App\Post;
 use App\Tag;
 use Illuminate\Http\Request;
@@ -20,15 +21,31 @@ class FrontController extends Controller
         return view('welcome',compact('posts','category','tags','latest_post'));
     }
     
-    public function singlePost($slug)
+    public function singlePost($id)
     {
-        $posts = Post::with('category','tag')->where('slug',$slug)->first();
+        $posts = Post::with('category','tag')->where('id',$id)->first();
     
         $category = Category::latest()->get();
         $tags = Tag::latest()->get();
         $latest_post = Post::latest()->take(5)->get();
-        Post::where('slug',$slug)->increment('view_count',1);
-        return view('home',compact('posts','category','tags','latest_post'));
+        Post::where('id',$id)->increment('view_count',1);
+    
+        $commentss = DB::table('comments')
+            ->select(
+                'comments.id as id',
+                'comments.post_id as post_id',
+                'comments.post_slug as post_slug',
+                'comments.description as description',
+                'comments.created_at as created_at'
+            )
+            ->leftJoin('posts','comments.post_id','=','posts.id')
+            ->where('comments.post_id',$id)
+            ->orderBy('comments.id','ASC')
+            ->get();
+        
+        //dd($commentss);
+        
+        return view('home',compact('posts','category','tags','latest_post','commentss'));
     }
     
     public function categoryPost($id)
@@ -39,14 +56,15 @@ class FrontController extends Controller
                             'categories.name as cat_name',
                             'categories.slug as cat_slug',
                             'tags.name as tag_name',
+                            'posts.id as post_id',
                             'posts.title as title',
                             'posts.image as image',
                             'posts.slug as slug',
                             'posts.body as body',
                             'posts.post_date as post_date'
                         )
-                        ->join('posts','categories.id','=','posts.category_id')
-                        ->join('tags','posts.tag_id','=','tags.id')
+                        ->leftJoin('posts','categories.id','=','posts.category_id')
+                        ->leftJoin('tags','posts.tag_id','=','tags.id')
                         ->where('categories.id',$id)
                         ->get();
         //dd($categories);
@@ -187,6 +205,36 @@ class FrontController extends Controller
         
                 $error = $e->getMessage();
         
+                return response()->json([
+                    'error' => $error
+                ],200);
+            }
+        }
+    }
+    
+    public function subscriber_email(Request $request)
+    {
+        if ($request->isMethod('post'))
+        {
+            DB::beginTransaction();
+        
+            try{
+                // Step 1 : Create subscribers
+                $email = $request->email;
+            
+                DB::table('subscribers')->insert(['email'=>$email]);
+            
+                DB::commit();
+            
+                return response()->json([
+                    'flash_message_success' => 'Subscriber  Successfully'
+                ],200);
+            
+            }catch(\Illuminate\Database\QueryException $e){
+                DB::rollback();
+            
+                $error = $e->getMessage();
+            
                 return response()->json([
                     'error' => $error
                 ],200);

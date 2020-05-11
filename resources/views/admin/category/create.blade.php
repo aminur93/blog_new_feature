@@ -85,7 +85,10 @@ Create category
                     },
 
                     success: function (data) {
-                        if(data) {
+
+                        $('#data-table').DataTable().ajax.reload();
+
+                        if(data.flash_message_success) {
                             $('#success_message').html(' <div class="alert alert-success alert-block">\n' +
                                 '                <button type="button" class="close" data-dismiss="alert">x</button>\n' +
                                 '               <strong>' + data.flash_message_success + '</strong>\n' +

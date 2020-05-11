@@ -31,7 +31,7 @@
                     <p>
                        <?= substr(strip_tags($post->body),0,200)?>
                     </p>
-                    <a href="{{ route('single.post',$post->slug) }}" class="btn btn-small btn-theme">Read more</a>
+                    <a href="{{ route('single.post',$post->id) }}" class="btn btn-small btn-theme">Read more</a>
                 </div>
             </div>
         </article>

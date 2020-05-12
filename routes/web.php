@@ -116,6 +116,15 @@ Route::group(['middleware' => ['auth','author']], function () {
     
     Route::get('/authordashboard', 'AuthorController@index')->name('author.dashboard');
     
+    //Post Routes
+    Route::get('/post',['as'=>'post','uses'=>'PostController@index']);
+    Route::get('/post/create',['as'=>'post.create','uses'=>'PostController@create']);
+    Route::post('post/store',['as'=>'post.store','uses'=>'PostController@store']);
+    Route::get('post/getData',['as'=>'post.getData','uses'=>'PostController@getData']);
+    Route::get('post/edit/{id}',['as'=>'post.edit','uses'=>'PostController@edit']);
+    Route::post('/post/update/{id}',['as'=>'post.update','uses'=>'PostController@update']);
+    Route::get('/post/delete-post/{id}',['as'=>'post.destroy','uses'=>'PostController@destroy']);
+    
 });
 
 
